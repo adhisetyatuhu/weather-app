@@ -6,6 +6,19 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+::placeholder {
+    color: white;
+}
+
+.fs-01 {
+    font-size: 5em;
+}
+
+.main-box {
+    box-shadow: 0 0 2em rgba(255, 255, 255, 0.634) inset;
+    height: 100%;
+}
+
 .weather-icon {
     font-size: 3.5em;
 }
@@ -23,6 +36,17 @@ body {
     padding-bottom: 1rem;
     margin-left: 1rem;
     margin-right: 1rem;
+}
+
+#search {
+    width: 100%;
+    border: 2px solid white;
+    background-color: #9ae2fb;
+}
+
+#search:focus {
+    border-color: rgb(48, 107, 219);
+    outline: none;
 }
 
 
