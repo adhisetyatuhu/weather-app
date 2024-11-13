@@ -39,7 +39,7 @@ h1 {
     height: 10em;
 }
 
-#weekly-info {
+#daily-info {
     border-radius: 0.75rem;
     /* box-shadow: 0 0 3em white inset; */
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.738);
@@ -54,12 +54,12 @@ h1 {
 }
 
 /* to hide scrollbar */
-#weekly-info {
+#daily-info {
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
 }
 
-#weekly-info::-webkit-scrollbar {
+#daily-info::-webkit-scrollbar {
     display: none;
 }
 /* --end to hide scrollbar */
