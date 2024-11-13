@@ -1,9 +1,17 @@
 body {
     margin: 0;
+    height: 100vh;
+    /* background-image: linear-gradient(to bottom, rgba(16, 171, 218, 0.3), rgb(188, 224, 251)); */
+    /* background-image: linear-gradient(to top left, rgba(6, 154, 199, 0.3), rgb(206, 247, 255)); */
     background-color: #9ae2fb;
     /* background-color: #1b2326; */
     color: #286488;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    font-family: "Rye", serif;
+    font-style: italic;
 }
 
 ::placeholder {
@@ -19,34 +27,60 @@ body {
     height: 100%;
 }
 
-.weather-icon {
-    font-size: 3.5em;
+.weather-icon svg{
+    height: 5em;
 }
 
-.weather-icon-lg {
-    font-size: 5em;
+.bg-dark-transparent {
+    background-color: rgb(40, 100, 136, 0.1);
+}
+
+.weather-icon-lg svg {
+    height: 10em;
 }
 
 #weekly-info {
     border-radius: 0.75rem;
     /* box-shadow: 0 0 3em white inset; */
-    box-shadow: 0 0 2em rgba(255, 255, 255, 0.738) inset;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.738);
     padding-left: 2rem;
     padding-right: 2rem;
+    padding-top: 1rem;
     padding-bottom: 1rem;
     margin-left: 1rem;
     margin-right: 1rem;
+    overflow: scroll;
+    gap: 3rem;
 }
+
+/* to hide scrollbar */
+#weekly-info {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+
+#weekly-info::-webkit-scrollbar {
+    display: none;
+}
+/* --end to hide scrollbar */
 
 #search {
     width: 100%;
-    border: 2px solid white;
-    background-color: #9ae2fb;
+    border: 2px solid rgba(255, 255, 255, 0.634);
+    background-color: transparent;
+    box-shadow: 0 0 0.5em rgba(255, 255, 255, 0.634) inset;
 }
 
 #search:focus {
-    border-color: rgb(48, 107, 219);
+    /* border-color: #286488; */
     outline: none;
+    color: #286488;
+    box-shadow: 0 0 0 inset;
 }
 
+.weather-group {
+    box-shadow: 0 0 2em white inset;
+    border-radius: 2rem;
+    padding: 2rem;
+}
 
