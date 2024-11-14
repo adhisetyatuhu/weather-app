@@ -17,7 +17,7 @@
 
 <body>
     <div class="container">
-        <header class="d-flex justify-content-between mt-2">
+        <header class="d-flex justify-content-between p-2">
             <h1 class="">Weatherboo</h1>
             <div>
                 <div id="time">Monday </div>
@@ -78,8 +78,13 @@
             </div>
         </div>
 
-        <div class="row gap-2">
-            <div id="daily-info" class="d-flex justify-content-between" onmousedown="mouseDown()" onmouseup="mouseUp()">
+        <div class="row gap-2" style="margin-right: 1rem;">
+            <!-- <div class="btn-scroll-group">
+            </div> -->
+            <div id="daily-info" class="d-flex justify-content-between align-items-center">
+                <button class="btn-scroll btn-scroll-left position-absolute">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 384.7V127.3c0-17.8 21.5-26.7 34.1-14.1l128.7 128.7c7.8 7.8 7.8 20.5 0 28.3L34.1 398.8C21.5 411.4 0 402.5 0 384.7z"/></svg>
+                </button>
                 <div class="weather-group text-center">
                         <div class="weather-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0,0,256,256">
@@ -317,7 +322,13 @@
                     </div>
                     Sunday
                 </div>
+                <button class="btn-scroll btn-scroll-right position-absolute">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M192 127.3v257.3c0 17.8-21.5 26.7-34.1 14.1L29.2 270.1c-7.8-7.8-7.8-20.5 0-28.3l128.7-128.7c12.6-12.6 34.1-3.7 34.1 14.1z"/></svg>
+                </button>
             </div>
+            <!-- <div class="btn-scroll-group">
+            </div> -->
+            
         </div>
     </div>
 

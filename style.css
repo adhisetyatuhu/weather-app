@@ -1,3 +1,6 @@
+html {
+    scroll-behavior: smooth;
+}
 body {
     margin: 0;
     height: 100vh;
@@ -20,6 +23,7 @@ h1 {
 
 .fs-01 {
     font-size: 5em;
+    font-weight: bold;
 }
 
 .main-box {
@@ -82,5 +86,39 @@ h1 {
     box-shadow: 0 0 2em white inset;
     border-radius: 2rem;
     padding: 2rem;
+}
+
+.btn-scroll-group {
+    position: absolute;
+    height: 100%;
+}
+
+.btn-scroll {
+    border: 0;
+    display: inline;
+    padding: 1em 1em;
+    position: relative;
+    background-color: transparent;
+}
+
+.btn-scroll:hover {
+    background-color: rgb(255, 255, 255, 0.3);
+}
+
+#daily-info {
+    /* position: absolute; */
+}
+
+.btn-scroll-left {
+    left: 0;
+}
+
+.btn-scroll-right {
+    right: 0;
+}
+
+.btn-scroll svg {
+    height: 3em;
+    fill: white;
 }
 
