@@ -1,15 +1,33 @@
-html {
-    scroll-behavior: smooth;
-}
 body {
     margin: 0;
     height: 100vh;
     /* background-image: linear-gradient(to bottom, rgba(16, 171, 218, 0.3), rgb(188, 224, 251)); */
     /* background-image: linear-gradient(to top left, rgba(6, 154, 199, 0.3), rgb(206, 247, 255)); */
-    background-color: #9ae2fb;
+    /* background-color: #9ae2fb; */
     /* background-color: #1b2326; */
+    background-color: white;
+    /* starry night */
+    /* background-color:black;
+    background-image:
+    radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+    radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+    radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+    radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px; */
+    /* --end starry night */
+
+    /* daytime */
+    /* --end daytime */
+
     color: #286488;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+#content {
+    padding: 2rem;
+    background-color: #9ae2fb;
+    border-radius: 30px;
 }
 
 h1 {
@@ -39,6 +57,10 @@ h1 {
     background-color: rgb(40, 100, 136, 0.1);
 }
 
+.weather-group {
+    background-color: #9ae2fb;
+}
+
 .weather-icon-lg svg {
     height: 10em;
 }
@@ -46,15 +68,24 @@ h1 {
 #daily-info {
     border-radius: 0.75rem;
     /* box-shadow: 0 0 3em white inset; */
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.738);
-    padding-left: 2rem;
-    padding-right: 2rem;
+    /* box-shadow: 0 0 5px rgba(255, 255, 255, 0.738); */
+    /* background-color: rgb(0, 0, 0, 0.1); */
+    /* padding-left: 2rem;
+    padding-right: 2rem; */
     padding-top: 1rem;
     padding-bottom: 1rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
+    /* margin-left: 1rem;
+    margin-right: 1rem; */
     overflow: scroll;
-    gap: 3rem;
+    scroll-behavior: smooth;
+    gap: 1rem;
+}
+
+.weather-group {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0.5em white inset;
+    border-radius: 1rem;
+    padding: 1em 2em;
 }
 
 /* to hide scrollbar */
@@ -68,6 +99,7 @@ h1 {
 }
 /* --end to hide scrollbar */
 
+/* search */
 #search {
     width: 100%;
     border: 2px solid rgba(255, 255, 255, 0.634);
@@ -81,13 +113,9 @@ h1 {
     color: #286488;
     box-shadow: 0 0 0 inset;
 }
+/* --end search */
 
-.weather-group {
-    box-shadow: 0 0 2em white inset;
-    border-radius: 2rem;
-    padding: 2rem;
-}
-
+/* scroll button */
 .btn-scroll-group {
     position: absolute;
     height: 100%;
@@ -102,11 +130,8 @@ h1 {
 }
 
 .btn-scroll:hover {
-    background-color: rgb(255, 255, 255, 0.3);
-}
-
-#daily-info {
-    /* position: absolute; */
+    /* background-color: rgb(255, 255, 255, 0.3); */
+    background-color: rgb(167, 167, 167, 0.3);
 }
 
 .btn-scroll-left {
@@ -119,6 +144,7 @@ h1 {
 
 .btn-scroll svg {
     height: 3em;
-    fill: white;
+    fill: black;
 }
 
+/* --end scroll button */
