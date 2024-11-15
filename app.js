@@ -10,10 +10,6 @@ function scrollDailyLeft() {
     dailyBoxNode.scrollLeft -= 200;
 }
 
-buttonScollRight.addEventListener('click', scrollDailyRight);
-buttonScrollLeft.addEventListener('click', scrollDailyLeft);
-
-
 function getWeatherIcon(wmoCode) {
     if (wmoCode === 0) {
         // clear or sunny
@@ -296,16 +292,42 @@ function getWeatherIcon(wmoCode) {
     }
 }
 
-function renderDailyCard(wmoCode, day, temperature, humidity, precipitation) {
+const scrollButtons = `<button id="btn-scroll-left" class="btn-scroll btn-scroll-left position-absolute" onclick="scrollDailyRight()">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                <path
+                                    d="M192 127.3v257.3c0 17.8-21.5 26.7-34.1 14.1L29.2 270.1c-7.8-7.8-7.8-20.5 0-28.3l128.7-128.7c12.6-12.6 34.1-3.7 34.1 14.1z" />
+                            </svg>
+                        </button>
+                        <button id="btn-scroll-right" class="btn-scroll btn-scroll-right position-absolute" onclick="scrollDailyLeft()">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                <path
+                                    d="M0 384.7V127.3c0-17.8 21.5-26.7 34.1-14.1l128.7 128.7c7.8 7.8 7.8 20.5 0 28.3L34.1 398.8C21.5 411.4 0 402.5 0 384.7z" />
+                            </svg>
+                        </button>`;
+
+function renderDailyCard(wmoCode, time, temperatureMin, temperatureMax, precipitation) {
     const icon = getWeatherIcon(wmoCode);
-    return `
-    <div class="weather-group text-center">
-        ${day}
-        <div class="weather-icon">
-            ${icon}
-        </div>
-        <div class="text-nowrap">${temperature}&deg;C / ${humidity}% / ${precipitation}%</div>
-    </div>`
+    const parsedTime = new Date(time);
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+    const formattedTime = parsedTime.toLocaleDateString('en-US', options);
+    return `<div class="weather-group text-center">
+                ${formattedTime}
+                <div class="weather-icon">
+                    ${icon}
+                </div>
+                <div class="text-nowrap">${Math.round(temperatureMin)}&deg;- ${Math.round(temperatureMax)}&deg;C / ${precipitation}%</div>
+            </div>`;
+}
+
+function renderDaily(wmoCode, time, temperatureMin, temperatureMax, precipitation) {
+    const dailyInfo = document.getElementById('daily-info');
+    dailyInfo.innerHTML = scrollButtons;
+    for (let i=0; i<wmoCode.length; i++) {
+        let card = renderDailyCard(wmoCode[i], time[i], temperatureMin[i], temperatureMax[i], precipitation[i]);
+        dailyInfo.innerHTML += card;
+    }
 }
 
 async function getWeatherData(latitude, longitude) {
@@ -313,7 +335,14 @@ async function getWeatherData(latitude, longitude) {
     try {
         const req = await fetch(URL);
         const  data = await req.json();
-        console.log(data);
+        // console.log(data);
+        const wmoCode = data.daily.weather_code;
+        const time = data.daily.time;
+        const temperatureMax = data.daily.temperature_2m_max;
+        const temperatureMin = data.daily.temperature_2m_min;
+        const precipitation = data.daily.precipitation_probability_max;
+        
+        renderDaily(wmoCode, time, temperatureMin, temperatureMax, precipitation);
     } catch (err) {
         console.error(err);
     }
