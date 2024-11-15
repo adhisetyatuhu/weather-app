@@ -296,6 +296,18 @@ function getWeatherIcon(wmoCode) {
     }
 }
 
+function renderDailyCard(wmoCode, day, temperature, humidity, precipitation) {
+    const icon = getWeatherIcon(wmoCode);
+    return `
+    <div class="weather-group text-center">
+        ${day}
+        <div class="weather-icon">
+            ${icon}
+        </div>
+        <div class="text-nowrap">${temperature}&deg;C / ${humidity}% / ${precipitation}%</div>
+    </div>`
+}
+
 async function getWeatherData(latitude, longitude) {
     let URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
     try {
