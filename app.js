@@ -292,44 +292,6 @@ function getWeatherIcon(wmoCode) {
     }
 }
 
-const scrollButtons = `<button id="btn-scroll-left" class="btn-scroll btn-scroll-left position-absolute" onclick="scrollDailyLeft()">
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                <path
-                                    d="M192 127.3v257.3c0 17.8-21.5 26.7-34.1 14.1L29.2 270.1c-7.8-7.8-7.8-20.5 0-28.3l128.7-128.7c12.6-12.6 34.1-3.7 34.1 14.1z" />
-                            </svg>
-                        </button>
-                        <button id="btn-scroll-right" class="btn-scroll btn-scroll-right position-absolute" onclick="scrollDailyRight()">
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                <path
-                                    d="M0 384.7V127.3c0-17.8 21.5-26.7 34.1-14.1l128.7 128.7c7.8 7.8 7.8 20.5 0 28.3L34.1 398.8C21.5 411.4 0 402.5 0 384.7z" />
-                            </svg>
-                        </button>`;
-
-function renderDailyCard(wmoCode, time, temperatureMin, temperatureMax, precipitation) {
-    const icon = getWeatherIcon(wmoCode);
-    const parsedTime = new Date(time);
-    const options = { weekday: 'short', month: 'short', day: 'numeric' };
-    const formattedTime = parsedTime.toLocaleDateString('en-US', options);
-    return `<div class="weather-group text-center">
-                ${formattedTime}
-                <div class="weather-icon">
-                    ${icon}
-                </div>
-                <div class="text-nowrap">${Math.round(temperatureMin)}&deg;- ${Math.round(temperatureMax)}&deg;C / ${precipitation}%</div>
-            </div>`;
-}
-
-function renderDailyCards(wmoCode, time, temperatureMin, temperatureMax, precipitationProbability) {
-    const dailyInfo = document.getElementById('daily-info');
-    dailyInfo.innerHTML = scrollButtons;
-    for (let i=0; i<wmoCode.length; i++) {
-        let card = renderDailyCard(wmoCode[i], time[i], temperatureMin[i], temperatureMax[i], precipitationProbability[i]);
-        dailyInfo.innerHTML += card;
-    }
-}
-
 async function getWeatherData(latitude, longitude) {
     // let URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
     let URL = `https://api.open-meteo.com/v1/forecast?latitude=-6.1818&longitude=106.8223&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
@@ -382,6 +344,44 @@ async function getLatitudeLongitude(cityKeyword, limit=1) {
                 'city_name': cityName}
     } catch (error) {
         console.error(error);
+    }
+}
+
+const scrollButtons = `<button id="btn-scroll-left" class="btn-scroll btn-scroll-left position-absolute" onclick="scrollDailyLeft()">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                <path
+                                    d="M192 127.3v257.3c0 17.8-21.5 26.7-34.1 14.1L29.2 270.1c-7.8-7.8-7.8-20.5 0-28.3l128.7-128.7c12.6-12.6 34.1-3.7 34.1 14.1z" />
+                            </svg>
+                        </button>
+                        <button id="btn-scroll-right" class="btn-scroll btn-scroll-right position-absolute" onclick="scrollDailyRight()">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                <path
+                                    d="M0 384.7V127.3c0-17.8 21.5-26.7 34.1-14.1l128.7 128.7c7.8 7.8 7.8 20.5 0 28.3L34.1 398.8C21.5 411.4 0 402.5 0 384.7z" />
+                            </svg>
+                        </button>`;
+
+function renderDailyCard(wmoCode, time, temperatureMin, temperatureMax, precipitation) {
+    const icon = getWeatherIcon(wmoCode);
+    const parsedTime = new Date(time);
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+    const formattedTime = parsedTime.toLocaleDateString('en-US', options);
+    return `<div class="weather-group text-center">
+                ${formattedTime}
+                <div class="weather-icon">
+                    ${icon}
+                </div>
+                <div class="text-nowrap">${Math.round(temperatureMin)}&deg;- ${Math.round(temperatureMax)}&deg;C / ${precipitation}%</div>
+            </div>`;
+}
+
+function renderDailyCards(wmoCode, time, temperatureMin, temperatureMax, precipitationProbability) {
+    const dailyInfo = document.getElementById('daily-info');
+    dailyInfo.innerHTML = scrollButtons;
+    for (let i=0; i<wmoCode.length; i++) {
+        let card = renderDailyCard(wmoCode[i], time[i], temperatureMin[i], temperatureMax[i], precipitationProbability[i]);
+        dailyInfo.innerHTML += card;
     }
 }
 
