@@ -321,45 +321,98 @@ function renderDailyCard(wmoCode, time, temperatureMin, temperatureMax, precipit
             </div>`;
 }
 
-function renderDailyCards(wmoCode, time, temperatureMin, temperatureMax, precipitation) {
+function renderDailyCards(wmoCode, time, temperatureMin, temperatureMax, precipitationProbability) {
     const dailyInfo = document.getElementById('daily-info');
     dailyInfo.innerHTML = scrollButtons;
     for (let i=0; i<wmoCode.length; i++) {
-        let card = renderDailyCard(wmoCode[i], time[i], temperatureMin[i], temperatureMax[i], precipitation[i]);
+        let card = renderDailyCard(wmoCode[i], time[i], temperatureMin[i], temperatureMax[i], precipitationProbability[i]);
         dailyInfo.innerHTML += card;
     }
 }
 
 async function getWeatherData(latitude, longitude) {
-    let URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
+    // let URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
+    let URL = `https://api.open-meteo.com/v1/forecast?latitude=-6.1818&longitude=106.8223&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
     try {
         const req = await fetch(URL);
         const  data = await req.json();
         // console.log(data);
-        const wmoCode = data.daily.weather_code;
-        const time = data.daily.time;
-        const temperatureMax = data.daily.temperature_2m_max;
-        const temperatureMin = data.daily.temperature_2m_min;
-        const precipitation = data.daily.precipitation_probability_max;
+        const dailyWMOCode = data.daily.weather_code;
+        const dailyTime = data.daily.time;
+        const dailyTemperatureMax = data.daily.temperature_2m_max;
+        const dailyTemperatureMin = data.daily.temperature_2m_min;
+        const dailyPrecipitationProb = data.daily.precipitation_probability_max;
+
+        const currentTime = data.current.time;
+        const currentTemperature = data.current.temperature_2m;
+        const currentHumidity = data.current.relative_humidity_2m;
+        const currentPrecipitation = data.current.precipitation;
+        const currentWindDirection = data.current.wind_direction_10m;
+        const currentWindSpeed = data.current.wind_speed_10m;
         
-        renderDailyCards(wmoCode, time, temperatureMin, temperatureMax, precipitation);
+        return {'daily': {'wmo_code': dailyWMOCode,
+                          'time': dailyTime,
+                          'temperature_min': dailyTemperatureMin,
+                          'temperature_max': dailyTemperatureMax,
+                          'precipitation_probability': dailyPrecipitationProb },
+                 'current': { 'temperature': currentTemperature,
+                              'time': currentTime,
+                              'humidity': currentHumidity,
+                              'precipitaton': currentPrecipitation,
+                              'wind_direction': currentWindDirection,
+                              'wind_speed': currentWindSpeed } 
+                }
+        
     } catch (err) {
         console.error(err);
     }
 }
 
-async function getLatitudeLongitude(cityName, limit=1) {
-    let URL = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=${limit}&language=en&format=json`
+async function getLatitudeLongitude(cityKeyword, limit=1) {
+    let URL = `https://geocoding-api.open-meteo.com/v1/search?name=${cityKeyword}&count=${limit}&language=en&format=json`
     try {
         const req = await fetch(URL);
         const data = await req.json();
-        let latitude = data.results[0].latitude;
-        let longitude = data.results[0].longitude;
-        // console.log(data.results[0].latitude);
-        getWeatherData(latitude, longitude);
+        const latitude = data.results[0].latitude;
+        const longitude = data.results[0].longitude;
+        const cityName = data.results[0].name;
+        
+        return {'latitude': latitude, 
+                'longitude': longitude, 
+                'city_name': cityName}
     } catch (error) {
         console.error(error);
     }
 }
 
-getLatitudeLongitude('surabaya');
+function renderMainInfo(cityName, temperature, humidity, time) {
+    const locationNode = document.getElementById('location');
+    const temperatureNode = document.getElementById('temperature');
+    const humidityNode = document.getElementById('humidity');
+    const currentDayNode = document.getElementById('current-day');
+    const currentDateNode = document.getElementById('current-date');
+
+    const currentDate = time.split('T')[0];
+    const parsedTime = new Date(currentDate);
+    const options1 = { weekday: 'long'};
+    const options2 = { month: 'short', day: 'numeric', year:'numeric' };
+    const formattedDay = parsedTime.toLocaleDateString('en-US', options1);
+    const formattedDate = parsedTime.toLocaleDateString('en-US', options2);
+    
+    currentDayNode.innerText = formattedDay;
+    currentDateNode.innerText = formattedDate;
+
+    locationNode.innerText = cityName;
+    temperatureNode.innerText = `${temperature}\u{B0}C`;
+    humidityNode.innerText = `${humidity}% humidity`;
+}
+
+async function renderInfoAll(cityName) {
+    const cityInfo = await getLatitudeLongitude('surabaya');
+    const weatherInfo = await getWeatherData(cityInfo.latitude, cityInfo.longitude);
+    
+    renderMainInfo(cityInfo.city_name, weatherInfo.current.temperature, weatherInfo.current.humidity, weatherInfo.current.time)
+    renderDailyCards(weatherInfo.daily.wmo_code, weatherInfo.daily.time, weatherInfo.daily.temperature_min, weatherInfo.daily.temperature_max, weatherInfo.daily.precipitation_probability)
+}
+
+renderInfoAll('surabaya');
