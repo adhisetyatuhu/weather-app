@@ -408,11 +408,19 @@ function renderMainInfo(cityName, temperature, humidity, time) {
 }
 
 async function renderInfoAll(cityName) {
-    const cityInfo = await getLatitudeLongitude('surabaya');
+    const cityInfo = await getLatitudeLongitude(cityName);
     const weatherInfo = await getWeatherData(cityInfo.latitude, cityInfo.longitude);
     
     renderMainInfo(cityInfo.city_name, weatherInfo.current.temperature, weatherInfo.current.humidity, weatherInfo.current.time)
     renderDailyCards(weatherInfo.daily.wmo_code, weatherInfo.daily.time, weatherInfo.daily.temperature_min, weatherInfo.daily.temperature_max, weatherInfo.daily.precipitation_probability)
 }
 
-renderInfoAll('surabaya');
+// search feature
+const searchWeather = (e) => {
+    if (e.key === 'Enter') {
+        const inputValue = document.getElementById('search').value;
+        renderInfoAll(inputValue);
+    }
+}
+
+document.getElementById('search').addEventListener('keydown', searchWeather);
