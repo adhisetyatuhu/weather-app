@@ -311,7 +311,7 @@ async function getWeatherData(latitude, longitude) {
         const currentPrecipitation = data.current.precipitation;
         const currentWindDirection = data.current.wind_direction_10m;
         const currentWindSpeed = data.current.wind_speed_10m;
-        
+
         return {'daily': {'wmo_code': dailyWMOCode,
                           'time': dailyTime,
                           'temperature_min': dailyTemperatureMin,
@@ -443,3 +443,19 @@ const searchWeather = (e) => {
 }
 
 document.getElementById('search').addEventListener('keydown', searchWeather);
+
+function getLocation() {
+    /**
+     * We're gonna use this feature only when we can find a way to get city name 
+     * based on latitude and longitude
+     */
+    navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        document.getElementById('location').innerText = 'Jakarta';
+        getWeatherData(latitude, longitude);
+    });
+}
+
+// to initiate value when the app opened
+renderInfoAll("Jakarta Pusat");
