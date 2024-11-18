@@ -362,7 +362,7 @@ const scrollButtons = `<button id="btn-scroll-left" class="btn-scroll btn-scroll
                             </svg>
                         </button>`;
 
-function renderDailyCard(wmoCode, time, temperatureMin, temperatureMax, precipitation) {
+function getDailyCard(wmoCode, time, temperatureMin, temperatureMax, precipitation) {
     const icon = getWeatherIcon(wmoCode);
     const parsedTime = new Date(time);
     const options = { weekday: 'short', month: 'short', day: 'numeric' };
@@ -380,17 +380,22 @@ function renderDailyCards(wmoCode, time, temperatureMin, temperatureMax, precipi
     const dailyInfo = document.getElementById('daily-info');
     dailyInfo.innerHTML = scrollButtons;
     for (let i=0; i<wmoCode.length; i++) {
-        let card = renderDailyCard(wmoCode[i], time[i], temperatureMin[i], temperatureMax[i], precipitationProbability[i]);
-        dailyInfo.innerHTML += card;
+        // starts from i==1, since daily info starts from tomorrow
+        if (i>0) {
+            let card = getDailyCard(wmoCode[i], time[i], temperatureMin[i], temperatureMax[i], precipitationProbability[i]);
+            dailyInfo.innerHTML += card;
+        }
     }
 }
 
-function renderMainInfo(cityName, temperature, humidity, time) {
+function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipitation_probability) {
     const locationNode = document.getElementById('location');
     const temperatureNode = document.getElementById('temperature');
     const humidityNode = document.getElementById('humidity');
     const currentDayNode = document.getElementById('current-day');
     const currentDateNode = document.getElementById('current-date');
+    const currentPrecipitationProbabilityNode = document.getElementById('current-precipitation-probability');
+    const currentWeatherIconNode = document.getElementById('weather-icon-main');
 
     const currentDate = time.split('T')[0];
     const parsedTime = new Date(currentDate);
@@ -405,14 +410,28 @@ function renderMainInfo(cityName, temperature, humidity, time) {
     locationNode.innerText = cityName;
     temperatureNode.innerText = `${temperature}\u{B0}C`;
     humidityNode.innerText = `${humidity}% humidity`;
+
+    currentPrecipitationProbabilityNode.innerText = `${precipitation_probability}% chance of raining`;
+    currentWeatherIconNode.innerHTML = getWeatherIcon(wmoCode);
 }
 
 async function renderInfoAll(cityName) {
     const cityInfo = await getLatitudeLongitude(cityName);
     const weatherInfo = await getWeatherData(cityInfo.latitude, cityInfo.longitude);
     
-    renderMainInfo(cityInfo.city_name, weatherInfo.current.temperature, weatherInfo.current.humidity, weatherInfo.current.time)
-    renderDailyCards(weatherInfo.daily.wmo_code, weatherInfo.daily.time, weatherInfo.daily.temperature_min, weatherInfo.daily.temperature_max, weatherInfo.daily.precipitation_probability)
+    renderMainInfo(
+        cityInfo.city_name, 
+        weatherInfo.daily.precipitation_probability[0],
+        weatherInfo.current.temperature, 
+        weatherInfo.current.humidity, 
+        weatherInfo.current.time, 
+        weatherInfo.daily.precipitation_probability[0]);
+    renderDailyCards(
+        weatherInfo.daily.wmo_code, 
+        weatherInfo.daily.time, 
+        weatherInfo.daily.temperature_min, 
+        weatherInfo.daily.temperature_max, 
+        weatherInfo.daily.precipitation_probability)
 }
 
 // search feature
