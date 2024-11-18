@@ -415,12 +415,22 @@ function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipit
     currentWeatherIconNode.innerHTML = getWeatherIcon(wmoCode);
 }
 
-async function renderInfoAll(cityName) {
-    const cityInfo = await getLatitudeLongitude(cityName);
-    const weatherInfo = await getWeatherData(cityInfo.latitude, cityInfo.longitude);
+async function renderInfoAll(cityKeyword, latitude, longitude) {
+    let weatherInfo;
+    let cityName;
+
+    // if the input is left empty and user hit enter or click search, then it will automatically get coordinates from browser.
+    if (cityKeyword) {
+        const cityInfo = await getLatitudeLongitude(cityKeyword);
+        cityName = cityInfo.city_name;
+        weatherInfo = await getWeatherData(cityInfo.latitude, cityInfo.longitude);
+    } else {
+        cityName = await getLocationName(latitude, longitude);
+        weatherInfo = await getWeatherData(latitude, longitude);
+    }
     
     renderMainInfo(
-        cityInfo.city_name, 
+        cityName, 
         weatherInfo.daily.precipitation_probability[0],
         weatherInfo.current.temperature, 
         weatherInfo.current.humidity, 
@@ -438,24 +448,41 @@ async function renderInfoAll(cityName) {
 const searchWeather = (e) => {
     if (e.key === 'Enter') {
         const inputValue = document.getElementById('search').value;
-        renderInfoAll(inputValue);
+        renderInfoAll(inputValue, null, null);
     }
 }
 
 document.getElementById('search').addEventListener('keydown', searchWeather);
+
+async function getLocationName(latitude, longitude) {
+    // API to get location from coordinates
+    const URL = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=892dc43f58c115efa3111853c9bb6a18`;
+    try {
+        const req = await fetch(URL);
+        const data = await req.json();
+
+        return data[0].local_names.id;
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 function getLocation() {
     /**
      * We're gonna use this feature only when we can find a way to get city name 
      * based on latitude and longitude
      */
+    
     navigator.geolocation.getCurrentPosition((position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        document.getElementById('location').innerText = 'Jakarta';
-        getWeatherData(latitude, longitude);
+        // const locationName = await getLocationName(latitude, longitude);
+        // const locationName = locationInfo[0].name;
+        // document.getElementById('location').innerText = locationName;
+        // getWeatherData(latitude, longitude);
+        renderInfoAll('', latitude, longitude);
     });
 }
 
 // to initiate value when the app opened
-renderInfoAll("Jakarta Pusat");
+getLocation();
