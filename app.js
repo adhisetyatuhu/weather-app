@@ -347,14 +347,14 @@ async function getLatitudeLongitude(cityKeyword, limit=1) {
     }
 }
 
-const scrollButtons = `<button id="btn-scroll-left" class="btn-scroll btn-scroll-left position-absolute" onclick="scrollDailyLeft()">
+const scrollButtons = `<button id="btn-scroll-left" class="btn-scroll btn-scroll-left position-absolute d-none d-md-block" onclick="scrollDailyLeft()">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
                                 <path
                                     d="M192 127.3v257.3c0 17.8-21.5 26.7-34.1 14.1L29.2 270.1c-7.8-7.8-7.8-20.5 0-28.3l128.7-128.7c12.6-12.6 34.1-3.7 34.1 14.1z" />
                             </svg>
                         </button>
-                        <button id="btn-scroll-right" class="btn-scroll btn-scroll-right position-absolute" onclick="scrollDailyRight()">
+                        <button id="btn-scroll-right" class="btn-scroll btn-scroll-right position-absolute d-none d-md-block" onclick="scrollDailyRight()">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 192 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
                                 <path
@@ -466,20 +466,14 @@ async function getLocationName(latitude, longitude) {
         console.log(err);
     }
 }
+// end search
 
 function getLocation() {
-    /**
-     * We're gonna use this feature only when we can find a way to get city name 
-     * based on latitude and longitude
-     */
     
     navigator.geolocation.getCurrentPosition((position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        // const locationName = await getLocationName(latitude, longitude);
-        // const locationName = locationInfo[0].name;
-        // document.getElementById('location').innerText = locationName;
-        // getWeatherData(latitude, longitude);
+        
         renderInfoAll('', latitude, longitude);
     });
 }

@@ -41,6 +41,12 @@ h1 {
     height: 100%;
 }
 
+.detail-box {
+    box-shadow: 0 0 0.5em white inset;
+    background-color: rgba(255, 255, 255, 0.2);
+    height: 100%;
+}
+
 .weather-icon svg{
     height: 5em;
 }
