@@ -33,6 +33,7 @@ h1 {
 .fs-01 {
     font-size: 6em;
     font-weight: bold;
+    overflow-x: auto;
 }
 
 .main-box {
