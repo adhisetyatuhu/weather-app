@@ -388,7 +388,7 @@ function renderDailyCards(wmoCode, time, temperatureMin, temperatureMax, precipi
     }
 }
 
-function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipitation_probability) {
+function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipitation_probability, temperatureMin, temperatureMax, windDirection, windSpeed) {
     const locationNode = document.getElementById('location');
     const temperatureNode = document.getElementById('temperature');
     const humidityNode = document.getElementById('humidity');
@@ -396,6 +396,9 @@ function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipit
     const currentDateNode = document.getElementById('current-date');
     const currentPrecipitationProbabilityNode = document.getElementById('current-precipitation-probability');
     const currentWeatherIconNode = document.getElementById('weather-icon-main');
+    const detailTemperature = document.getElementById('detail-temperature');
+    const detailWindDirection = document.getElementById('detail-wind-direction');
+    const detailWindSpeed = document.getElementById('detail-wind-speed');
 
     const currentDate = time.split('T')[0];
     const parsedTime = new Date(currentDate);
@@ -413,6 +416,10 @@ function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipit
 
     currentPrecipitationProbabilityNode.innerText = `${precipitation_probability}% chance of raining`;
     currentWeatherIconNode.innerHTML = getWeatherIcon(wmoCode);
+
+    detailTemperature.innerText = `${temperatureMin}\u{B0}- ${temperatureMax}\u{B0}C`;
+    detailWindDirection.innerText = `${windDirection}\u{B0}`;
+    detailWindSpeed.innerText = `${windSpeed} km/h`;
 }
 
 async function renderInfoAll(cityKeyword, latitude, longitude) {
@@ -435,7 +442,11 @@ async function renderInfoAll(cityKeyword, latitude, longitude) {
         weatherInfo.current.temperature, 
         weatherInfo.current.humidity, 
         weatherInfo.current.time, 
-        weatherInfo.daily.precipitation_probability[0]);
+        weatherInfo.daily.precipitation_probability[0],
+        weatherInfo.daily.temperature_min[0],
+        weatherInfo.daily.temperature_max[0],
+        weatherInfo.current.wind_direction,
+        weatherInfo.current.wind_speed);
     renderDailyCards(
         weatherInfo.daily.wmo_code, 
         weatherInfo.daily.time, 
