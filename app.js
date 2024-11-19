@@ -26,7 +26,7 @@ function getWeatherIcon(wmoCode) {
                 d="M14,24c0,5.524,4.477,10,10,10s10-4.476,10-10s-4.477-10-10-10S14,18.476,14,24">
             </path>
         </svg>`;
-    } else if (wmoCode === 1 || wmoCode === 3) {
+    } else if (wmoCode >= 1 && wmoCode <= 3) {
         // Slightly Cloudy
         return `
         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0,0,256,256">
@@ -152,7 +152,13 @@ function getWeatherIcon(wmoCode) {
                 </g>
             </g>
         </svg>`;
-    } else if ((wmoCode >= 80 && wmoCode <= 84) || (wmoCode >= 50 && wmoCode <= 69)) {
+    } else if (wmoCode >= 50 && wmoCode <= 69) {
+        // Light Rain
+        return `
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0,0,256,256">
+        <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.33333,5.33333)"><path d="M29.5,5c-4.69442,0 -8.5,3.80558 -8.5,8.5c0,4.69442 3.80558,8.5 8.5,8.5c4.69442,0 8.5,-3.80558 8.5,-8.5c0,-4.69442 -3.80558,-8.5 -8.5,-8.5z" fill="#ffffff"></path><path d="M37,14.893c-3.86599,0 -7,3.13401 -7,7c0,3.86599 3.13401,7 7,7c3.86599,0 7,-3.13401 7,-7c0,-3.86599 -3.13401,-7 -7,-7zM11,15c-3.86599,0 -7,3.13401 -7,7c0,3.86599 3.13401,7 7,7c3.86599,0 7,-3.13401 7,-7c0,-3.86599 -3.13401,-7 -7,-7z" fill="#ffffff"></path><path d="M17.5,8c-3.58985,0 -6.5,2.91015 -6.5,6.5c0,3.58985 2.91015,6.5 6.5,6.5c3.58985,0 6.5,-2.91015 6.5,-6.5c0,-3.58985 -2.91015,-6.5 -6.5,-6.5z" fill="#ffffff"></path><path d="M25,12.893c-3.86599,0 -7,3.13401 -7,7c0,3.86599 3.13401,7 7,7c3.86599,0 7,-3.13401 7,-7c0,-3.86599 -3.13401,-7 -7,-7z" fill="#ffffff"></path><path d="M7,25c0,2.209 1.791,4 4,4h25c2.209,0 4,-1.791 4,-4v-1c0,-2.209 -1.791,-4 -4,-4h-25c-2.209,0 -4,1.791 -4,4z" fill="#ffffff"></path><g fill="#2196f3"><path d="M26,29c-0.55228,0 -1,0.44772 -1,1c0,0.55228 0.44772,1 1,1c0.55228,0 1,-0.44772 1,-1c0,-0.55228 -0.44772,-1 -1,-1zM25,32c-0.55228,0 -1,0.44772 -1,1c0,0.55228 0.44772,1 1,1c0.55228,0 1,-0.44772 1,-1c0,-0.55228 -0.44772,-1 -1,-1zM24,35c-0.55228,0 -1,0.44772 -1,1c0,0.55228 0.44772,1 1,1c0.55228,0 1,-0.44772 1,-1c0,-0.55228 -0.44772,-1 -1,-1zM23,38c-0.55228,0 -1,0.44772 -1,1c0,0.55228 0.44772,1 1,1c0.55228,0 1,-0.44772 1,-1c0,-0.55228 -0.44772,-1 -1,-1zM22,41c-0.55228,0 -1,0.44772 -1,1c0,0.55228 0.44772,1 1,1c0.55228,0 1,-0.44772 1,-1c0,-0.55228 -0.44772,-1 -1,-1zM19,32c-0.55228,0 -1,0.44772 -1,1c0,0.55228 0.44772,1 1,1c0.55228,0 1,-0.44772 1,-1c0,-0.55228 -0.44772,-1 -1,-1zM18,35c-0.55228,0 -1,0.44772 -1,1c0,0.55228 0.44772,1 1,1c0.55228,0 1,-0.44772 1,-1c0,-0.55228 -0.44772,-1 -1,-1zM17,38c-0.55228,0 -1,0.44772 -1,1c0,0.55228 0.44772,1 1,1c0.55228,0 1,-0.44772 1,-1c0,-0.55228 -0.44772,-1 -1,-1zM20,29c-0.55228,0 -1,0.44772 -1,1c0,0.55228 0.44772,1 1,1c0.55228,0 1,-0.44772 1,-1c0,-0.55228 -0.44772,-1 -1,-1z"></path></g></g></g>
+        </svg>`
+    } else if ((wmoCode >= 80 && wmoCode <= 84)) {
         // Rain
         return `
         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100"
@@ -294,7 +300,7 @@ function getWeatherIcon(wmoCode) {
 
 async function getWeatherData(latitude, longitude) {
     // let URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
-    let URL = `https://api.open-meteo.com/v1/forecast?latitude=-6.1818&longitude=106.8223&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
+    let URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
     try {
         const req = await fetch(URL);
         const  data = await req.json();
@@ -305,6 +311,7 @@ async function getWeatherData(latitude, longitude) {
         const dailyTemperatureMin = data.daily.temperature_2m_min;
         const dailyPrecipitationProb = data.daily.precipitation_probability_max;
 
+        const currentWMOCode = data.current.weather_code;
         const currentTime = data.current.time;
         const currentTemperature = data.current.temperature_2m;
         const currentHumidity = data.current.relative_humidity_2m;
@@ -317,7 +324,8 @@ async function getWeatherData(latitude, longitude) {
                           'temperature_min': dailyTemperatureMin,
                           'temperature_max': dailyTemperatureMax,
                           'precipitation_probability': dailyPrecipitationProb },
-                 'current': { 'temperature': currentTemperature,
+                 'current': { 'wmo_code': currentWMOCode,
+                              'temperature': currentTemperature,
                               'time': currentTime,
                               'humidity': currentHumidity,
                               'precipitaton': currentPrecipitation,
@@ -430,15 +438,18 @@ async function renderInfoAll(cityKeyword, latitude, longitude) {
     if (cityKeyword) {
         const cityInfo = await getLatitudeLongitude(cityKeyword);
         cityName = cityInfo.city_name;
+        console.log(cityInfo);
         weatherInfo = await getWeatherData(cityInfo.latitude, cityInfo.longitude);
     } else {
         cityName = await getLocationName(latitude, longitude);
         weatherInfo = await getWeatherData(latitude, longitude);
     }
+
+    console.log(weatherInfo);
     
     renderMainInfo(
         cityName, 
-        weatherInfo.daily.precipitation_probability[0],
+        weatherInfo.current.wmo_code,
         weatherInfo.current.temperature, 
         weatherInfo.current.humidity, 
         weatherInfo.current.time, 
