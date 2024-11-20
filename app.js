@@ -422,7 +422,7 @@ function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipit
     temperatureNode.innerText = `${temperature}\u{B0}C`;
     humidityNode.innerText = `${humidity}% humidity`;
 
-    currentPrecipitationProbabilityNode.innerText = `${precipitation_probability}% chance of raining`;
+    currentPrecipitationProbabilityNode.innerText = `${precipitation_probability}% precipitation probability`;
     currentWeatherIconNode.innerHTML = getWeatherIcon(wmoCode);
 
     detailTemperature.innerText = `${temperatureMin}\u{B0}- ${temperatureMax}\u{B0}C`;
@@ -438,14 +438,11 @@ async function renderInfoAll(cityKeyword, latitude, longitude) {
     if (cityKeyword) {
         const cityInfo = await getLatitudeLongitude(cityKeyword);
         cityName = cityInfo.city_name;
-        console.log(cityInfo);
         weatherInfo = await getWeatherData(cityInfo.latitude, cityInfo.longitude);
     } else {
         cityName = await getLocationName(latitude, longitude);
         weatherInfo = await getWeatherData(latitude, longitude);
     }
-
-    console.log(weatherInfo);
     
     renderMainInfo(
         cityName, 
@@ -482,7 +479,7 @@ async function getLocationName(latitude, longitude) {
     try {
         const req = await fetch(URL);
         const data = await req.json();
-
+        
         return data[0].local_names.id;
     } catch (err) {
         console.log(err);
