@@ -299,7 +299,6 @@ function getWeatherIcon(wmoCode) {
 }
 
 async function getWeatherData(latitude, longitude) {
-    // let URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
     let URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max`
     try {
         const req = await fetch(URL);
@@ -338,7 +337,8 @@ async function getWeatherData(latitude, longitude) {
     }
 }
 
-async function getLatitudeLongitude(cityKeyword, limit=1) {
+// Get City Info
+async function getCityInfoByName(cityKeyword, limit=1) {
     let URL = `https://geocoding-api.open-meteo.com/v1/search?name=${cityKeyword}&count=${limit}&language=en&format=json`
     try {
         const req = await fetch(URL);
@@ -354,6 +354,25 @@ async function getLatitudeLongitude(cityKeyword, limit=1) {
         console.error(error);
     }
 }
+
+async function getCityInfoByCoordinate(latitude, longitude) {
+    // API to get location from coordinates
+    const URL = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=892dc43f58c115efa3111853c9bb6a18`;
+    try {
+        const req = await fetch(URL);
+        const data = await req.json();
+        
+        const cityName = data[0].local_names.id
+        return {
+            'latitude': latitude,
+            'longitude': longitude,
+            'city_name': cityName
+        };
+    } catch (err) {
+        console.log(err);
+    }
+}
+// end of Get City Info
 
 const scrollButtons = `<button id="btn-scroll-left" class="btn-scroll btn-scroll-left position-absolute d-none d-md-block" onclick="scrollDailyLeft()">
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -415,6 +434,7 @@ function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipit
     const formattedDay = parsedTime.toLocaleDateString('en-US', options1);
     const formattedDate = parsedTime.toLocaleDateString('en-US', options2);
     
+    // rendering
     currentDayNode.innerText = formattedDay;
     currentDateNode.innerText = formattedDate;
 
@@ -430,19 +450,8 @@ function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipit
     detailWindSpeed.innerText = `${windSpeed} km/h`;
 }
 
-async function renderInfoAll(cityKeyword, latitude, longitude) {
-    let weatherInfo;
-    let cityName;
-
-    // if the input is left empty and user hit enter or click search, then it will automatically get coordinates from browser.
-    if (cityKeyword) {
-        const cityInfo = await getLatitudeLongitude(cityKeyword);
-        cityName = cityInfo.city_name;
-        weatherInfo = await getWeatherData(cityInfo.latitude, cityInfo.longitude);
-    } else {
-        cityName = await getLocationName(latitude, longitude);
-        weatherInfo = await getWeatherData(latitude, longitude);
-    }
+async function renderInfoAll(cityName, latitude, longitude) {
+    const weatherInfo = await getWeatherData(latitude, longitude);
     
     renderMainInfo(
         cityName, 
@@ -464,36 +473,26 @@ async function renderInfoAll(cityKeyword, latitude, longitude) {
 }
 
 // search feature
-const searchWeather = (e) => {
+const searchWeather = async (e) => {
     if (e.key === 'Enter') {
         const inputValue = document.getElementById('search').value;
-        renderInfoAll(inputValue, null, null);
+        const cityInfo = await getCityInfoByName(inputValue)
+        renderInfoAll(cityInfo.city_name, cityInfo.latitude, cityInfo.longitude);
     }
 }
 
 document.getElementById('search').addEventListener('keydown', searchWeather);
-
-async function getLocationName(latitude, longitude) {
-    // API to get location from coordinates
-    const URL = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=892dc43f58c115efa3111853c9bb6a18`;
-    try {
-        const req = await fetch(URL);
-        const data = await req.json();
-        
-        return data[0].local_names.id;
-    } catch (err) {
-        console.log(err);
-    }
-}
-// end search
+// end of search feature
 
 function getLocation() {
-    
-    navigator.geolocation.getCurrentPosition((position) => {
+    navigator.geolocation.getCurrentPosition(async (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         
-        renderInfoAll('', latitude, longitude);
+        const cityInfo = await getCityInfoByCoordinate(latitude, longitude);
+        const cityName = cityInfo.city_name;
+
+        renderInfoAll(cityName, latitude, longitude);
     });
 }
 
