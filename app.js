@@ -399,7 +399,7 @@ function getDailyCard(wmoCode, time, temperatureMin, temperatureMax, precipitati
                 <div class="weather-icon">
                     ${icon}
                 </div>
-                <div class="text-nowrap">${Math.round(temperatureMin)}&deg;- ${Math.round(temperatureMax)}&deg;C / ${precipitation}%</div>
+                <div class="text-nowrap"><span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Temperature: ${Math.round(temperatureMin)}&deg;- ${Math.round(temperatureMax)}&deg;C \n Precipitation Probability: ${precipitation}%">${Math.round(temperatureMin)}&deg;- ${Math.round(temperatureMax)}&deg;C / ${precipitation}%</span></div>
             </div>`;
 }
 
@@ -413,6 +413,10 @@ function renderDailyCards(wmoCode, time, temperatureMin, temperatureMax, precipi
             dailyInfo.innerHTML += card;
         }
     }
+    
+    // to trigger tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 }
 
 function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipitation_probability, temperatureMin, temperatureMax, windDirection, windSpeed) {
