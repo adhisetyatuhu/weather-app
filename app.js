@@ -509,17 +509,23 @@ async function renderInfoAll(cityName, latitude, longitude) {
 }
 
 // search feature
-const searchWeather = async (e) => {
-    if (e.key === 'Enter') {
-        setLoadingAnimation(true);
-        const inputValue = document.getElementById('search').value;
-        const cityInfo = await getCityInfoByName(inputValue)
+async function searchWeather() {
+    setLoadingAnimation(true);
+    const inputValue = document.getElementById('search').value;
+    const cityInfo = await getCityInfoByName(inputValue)
 
-        renderInfoAll(cityInfo.city_name, cityInfo.latitude, cityInfo.longitude);
+    renderInfoAll(cityInfo.city_name, cityInfo.latitude, cityInfo.longitude);
+}
+
+document.getElementById('btn-search').addEventListener('click', searchWeather);
+
+const searchWeatherFromKeyboard = (e) => {
+    if (e.key === 'Enter') {
+        searchWeather();
     }
 }
 
-document.getElementById('search').addEventListener('keydown', searchWeather);
+document.getElementById('search').addEventListener('keydown', searchWeatherFromKeyboard);
 // end of search feature
 
 function getLocation() {
