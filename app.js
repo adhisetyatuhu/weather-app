@@ -357,7 +357,7 @@ async function getCityInfoByName(cityKeyword, limit=1) {
 
 async function getCityInfoByCoordinate(latitude, longitude) {
     // API to get location from coordinates
-    const URL = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=892dc43f58c115efa3111853c9bb6a18`;
+    const URL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=892dc43f58c115efa3111853c9bb6a18`;
     try {
         const req = await fetch(URL);
         const data = await req.json();
@@ -413,7 +413,7 @@ function renderDailyCards(wmoCode, time, temperatureMin, temperatureMax, precipi
             dailyInfo.innerHTML += card;
         }
     }
-    
+
     // to trigger tooltips
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
