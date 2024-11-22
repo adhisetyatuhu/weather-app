@@ -155,3 +155,9 @@ footer {
 footer a {
     text-decoration: none;
 }
+
+#loading {
+    height: 100%;
+    width: 100%;
+    background-color: #9ae2fb;
+}

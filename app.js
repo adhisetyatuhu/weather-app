@@ -450,6 +450,38 @@ function renderMainInfo(cityName, wmoCode, temperature, humidity, time, precipit
     detailWindSpeed.innerText = `${windSpeed} km/h`;
 }
 
+
+function setLoadingAnimation(isActive=false) {
+    const loadingElement = `<div class="d-flex align-items-center" style="height: 100%;">
+    <div class="spinner-grow"></div>
+    </div>`;
+
+    // main info
+    const weatherIconMain = document.getElementById('weather-icon-main');
+    const currentPrecipitation = document.getElementById('current-precipitation-probability');
+    const location = document.getElementById('location');
+    const temperature = document.getElementById('temperature');
+    const humidity = document.getElementById('humidity');
+    const detailWindDirection = document.getElementById('detail-wind-direction');
+    const detailWindSpeed = document.getElementById('detail-wind-speed');
+    const detailTemperature = document.getElementById('detail-temperature');
+
+    // daily info
+    const dailyInfo = document.getElementById('daily-info');
+
+    const loadingList = [weatherIconMain, temperature, detailWindDirection, detailWindSpeed, detailTemperature, dailyInfo];
+    const toBeEmptiedList = [currentPrecipitation, location, humidity];
+
+    if (isActive) {
+        for (let i=0; i<toBeEmptiedList.length; i++) {
+            toBeEmptiedList[i].innerText = "";
+        }
+        for (let i=0; i<loadingList.length; i++) {
+            loadingList[i].innerHTML = loadingElement;
+        }
+    }
+}
+
 async function renderInfoAll(cityName, latitude, longitude) {
     const weatherInfo = await getWeatherData(latitude, longitude);
     
@@ -477,6 +509,8 @@ const searchWeather = async (e) => {
     if (e.key === 'Enter') {
         const inputValue = document.getElementById('search').value;
         const cityInfo = await getCityInfoByName(inputValue)
+
+        setLoadingAnimation(true);
         renderInfoAll(cityInfo.city_name, cityInfo.latitude, cityInfo.longitude);
     }
 }
@@ -492,9 +526,11 @@ function getLocation() {
         const cityInfo = await getCityInfoByCoordinate(latitude, longitude);
         const cityName = cityInfo.city_name;
 
+        setLoadingAnimation(true);
         renderInfoAll(cityName, latitude, longitude);
     });
 }
 
 // to initiate value when the app opened
 getLocation();
+setLoadingAnimation(true);
