@@ -26,10 +26,6 @@ h1 {
     font-style: italic;
 }
 
-::placeholder {
-    color: white;
-}
-
 .fs-01 {
     font-size: 28cqw;
     font-weight: bold;
@@ -106,6 +102,10 @@ h1 {
     outline: none;
     color: #286488;
     box-shadow: 0 0 0 inset;
+}
+
+#search::placeholder {
+    color: #286488;
 }
 /* --end search */
 
